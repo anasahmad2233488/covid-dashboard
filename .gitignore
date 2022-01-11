@@ -121,4 +121,4 @@ db.sqlite3
 
 # Node Dependency directories
 dashboard/node_modules/
-static/*
+static/
