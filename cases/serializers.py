@@ -94,17 +94,12 @@ class DailyCheckinsSerializer(serializers.ModelSerializer):
 class CasesRangeSerializer(serializers.ModelSerializer):
     #state = StateSerializer(read_only=True)
 
-    def get_cases_new_per_population(self, obj):
-        return obj.get_cases_new_per_population()
-
-    cases_new_per_population = serializers.SerializerMethodField()
 
     class Meta:
         model = Cases
         fields = [
             'date',
             'cases_new',
-            'cases_new_per_population',
             ]
 
 class TotalCasesRangeSerializer(serializers.ModelSerializer):
