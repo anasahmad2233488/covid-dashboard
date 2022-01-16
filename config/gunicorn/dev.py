@@ -5,7 +5,8 @@ wsgi_app = "app.wsgi:application"
 # The granularity of Error log outputs
 loglevel = "debug"
 # The number of worker processes for handling requests
-workers = 2
+workers = 8
+timeout = 120
 # The socket to bind
 bind = "0.0.0.0:8000"
 # Restart workers when code changes (development only!)
