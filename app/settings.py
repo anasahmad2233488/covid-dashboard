@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-from db_settings import *
+from .db_settings import *
 
 
 # Password validation
