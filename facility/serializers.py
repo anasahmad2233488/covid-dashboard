@@ -69,3 +69,33 @@ class PKRCSerializer(serializers.ModelSerializer):
             'pkrc_pui',
             'pkrc_noncovid',
             ]
+
+class TotalHospitalAdmissionRangeSerializer(serializers.ModelSerializer):
+    #state = StateSerializer(read_only=True)
+
+    class Meta:
+        model = Hospital
+        fields = [
+            'date',
+            'admitted_covid',
+            ]
+
+class TotalICUAdmissionRangeSerializer(serializers.ModelSerializer):
+    #state = StateSerializer(read_only=True)
+
+    class Meta:
+        model = ICU
+        fields = [
+            'date',
+            'icu_covid',
+            ]
+
+class TotalPKRCAdmissionRangeSerializer(serializers.ModelSerializer):
+    #state = StateSerializer(read_only=True)
+
+    class Meta:
+        model = PKRC
+        fields = [
+            'date',
+            'admitted_covid',
+            ]
