@@ -6,9 +6,9 @@ from . import views
 router = routers.DefaultRouter()
 
 # Endpoints that allows date range filtering, for generating charts
-router.register(r'hospital-admission', views.TotalHospitalAdmissionRangeSerializer)
-router.register(r'icu-admission', views.TotalICUAdmissionRangeSerializer)
-router.register(r'pkrc-admission', views.TotalPKRCAdmissionRangeSerializer)
+router.register(r'hospital-admission', views.TotalHospitalAdmissionRangeViewSet)
+router.register(r'icu-admission', views.TotalICUAdmissionRangeViewSet)
+router.register(r'pkrc-admission', views.TotalPKRCAdmissionRangeViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

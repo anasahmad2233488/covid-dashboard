@@ -40,3 +40,13 @@ class VaccinationSerializer(serializers.ModelSerializer):
             'pending2',
             'pending3',
             ]
+
+class TotalCompletedVaccinationRangeSerializer(serializers.ModelSerializer):
+    #state = StateSerializer(read_only=True)
+
+    class Meta:
+        model = Vaccination
+        fields = [
+            'date',
+            'cumul_full',
+            ]
