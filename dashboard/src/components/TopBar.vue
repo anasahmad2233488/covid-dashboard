@@ -10,7 +10,7 @@
       rel="noopener">Dashboard</v-btn></li>
     <li><v-btn
       color="primary"
-       href="/predict"
+       href="/predict-dashboard/"
        rel="noopener">Predict</v-btn></li>
   </ul>
   <v-spacer></v-spacer>

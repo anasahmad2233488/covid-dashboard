@@ -28,9 +28,6 @@ export default {
   data: () => ({}),
   methods: {},
   mounted() {
-	if (document.location.pathname!='/'){
-		window.location.href='/'
-	}
   },
 };
 </script>

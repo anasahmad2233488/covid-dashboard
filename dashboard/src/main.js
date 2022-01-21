@@ -7,7 +7,7 @@ Vue.config.productionTip = false
 
 const routes = {
   '/': Home,
-  '/predict': Predict
+  '/predict-dashboard/': Predict
 }
 
 new Vue({

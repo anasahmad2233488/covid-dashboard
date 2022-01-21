@@ -287,7 +287,6 @@ export default {
           { name: 'Checkin Locations', value: '11'},
         ],
         start_date: (new Date('2021-01-01')).toISOString().substr(0, 10),
-        //end_date: (new Date(Date.now() - 60000*60*24 - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         end_date: (new Date('2021-12-01')).toISOString().substr(0, 10),
 
         updated_start_date: null,

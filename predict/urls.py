@@ -6,5 +6,6 @@ from . import views
 router = routers.DefaultRouter()
 
 urlpatterns = [
+    path(r'cases/', views.predictCasesView.as_view(), name='predict-cases'),
     path('', include(router.urls)),
 ]

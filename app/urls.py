@@ -26,4 +26,6 @@ urlpatterns = [
     path('vaccine/', include('vaccine.urls')),
     path('predict/', include('predict.urls')),
     re_path(r'^.*$', views.home),
+    #path('', views.home),
+    #path('predict', views.home),
 ]
