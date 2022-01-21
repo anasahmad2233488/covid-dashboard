@@ -1,5 +1,12 @@
 <template>
   <v-container max-width="700px">
+    <v-row>
+      <v-col></v-col>
+      <v-col cols="8">
+        <div style="" class="text-center mt-10 mb-10 ml-3 mr-3">Explore Malaysia COVID-19 data. Select the period between which you wish the statistics to be presented to you.</div>
+      </v-col>
+      <v-col></v-col>
+    </v-row>
     <v-row class="text-center">
       <v-col cols="2">
         <v-select
@@ -116,6 +123,7 @@
         <LineChart
           ref="line_chart"
           v-bind:chart_data="chart_data"
+          v-bind:x_axis="data_select.name"
         />
       </v-col>
     </v-row>
@@ -125,15 +133,76 @@
     <v-row class="text-center">
       <v-col cols=12>
         <center class="pt-6 pb-6">
-          Cases for <b>{{updated_end_date}}</b>.
+          Statistics for the day <b>{{updated_end_date}}</b>.
         </center>
+      </v-col>
+    </v-row>
+    <v-row class="text-center">
+      <v-col style="font-size:14px">
+        <u>Cases</u>
       </v-col>
     </v-row>
     <v-row class="text-center">
       <v-col
        cols="3"
        class="d-flex flex-column"
-       v-for="item in items.daily"
+       v-for="item in items.daily_cases"
+       :key="item.id"
+       >
+        <v-card class="card flex d-flex flex-column"
+          elevation="2"
+          style="flex: auto"
+        >
+        <v-card-title class="p"
+        >
+          {{ item.name }}
+        </v-card-title>
+        <v-card-text
+          class="card-text mb-4"
+        >
+          {{ item.value }}
+        </v-card-text>
+      </v-card>
+      </v-col>
+    </v-row>
+    <v-row class="text-center">
+      <v-col style="font-size:14px">
+        <u>Testing</u>
+      </v-col>
+    </v-row>
+    <v-row class="text-center">
+      <v-col
+       cols="3"
+       class="d-flex flex-column"
+       v-for="item in items.daily_testing"
+       :key="item.id"
+       >
+        <v-card class="card flex d-flex flex-column"
+          elevation="2"
+          style="flex: auto"
+        >
+        <v-card-title class="p"
+        >
+          {{ item.name }}
+        </v-card-title>
+        <v-card-text
+          class="card-text mb-4"
+        >
+          {{ item.value }}
+        </v-card-text>
+      </v-card>
+      </v-col>
+    </v-row>
+    <v-row class="text-center">
+      <v-col style="font-size:14px">
+        <u>MySejahtera Checkins</u>
+      </v-col>
+    </v-row>
+    <v-row class="text-center">
+      <v-col
+       cols="3"
+       class="d-flex flex-column"
+       v-for="item in items.daily_mysj"
        :key="item.id"
        >
         <v-card class="card flex d-flex flex-column"
@@ -207,7 +276,7 @@ export default {
       chart_data:[
         {"date":"2013-04-28","value":0},{"date":"2013-04-29","value":0}],
         items: {
-          daily:[
+          daily_cases:[
             { id: 1, name: 'New Cases', value: '0'},
             { id: 2, name: 'Recoveries', value: '0'},
             { id: 3, name: 'Deaths', value: '0'},
@@ -216,12 +285,16 @@ export default {
             { id: 6, name: 'Recoveries (per 1M pop)', value: '0'},
             { id: 7, name: 'Deaths (per 1M pop)', value: '0'},
             { id: 8, name: 'Active Cases (per 1M pop)', value: '0'},
+          ],
+          daily_testing:[
             { id: 9, name: 'Test: rtk_ag', value: '0'},
             { id: 10, name: 'Test: pcr', value: '0'},
             { id: 11, name: 'Test: total', value: '0'},
             { id: 12, name: 'Test: rtk_ag (per 1M pop)', value: '0'},
             { id: 13, name: 'Test: pcr (per 1M pop)', value: '0'},
             { id: 14, name: 'Test: total (per 1M pop)', value: '0'},
+          ],
+          daily_mysj:[
             { id: 15, name: 'MySJ Checkins', value: '0'},
             { id: 16, name: 'MySJ Total Individuals', value: '0'},
             { id: 17, name: 'MySJ Total Places', value: '0'},
@@ -304,6 +377,7 @@ export default {
     },
     mounted() {
 		this.api_url = process.env.VUE_APP_ROOT_API;
+    this.$refs.line_chart.x_axis = "asdsads";
 		this.update();
     },
     methods: {
@@ -325,6 +399,7 @@ export default {
             chart_data.push({"date": d.date, "value": d[var_name]})
           });
           this.$refs.line_chart.updateChart(chart_data);
+
         });
 
         axios.get(this.api_url+'cases/cases-summary/?state='+state+'&date='+this.end_date)

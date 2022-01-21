@@ -9,6 +9,8 @@ export default {
   name: "Chart",
   props: {
     chart_data: Array,
+    x_axis: String,
+    y_axis: String,
   },
   data() {
     return {
@@ -96,6 +98,20 @@ export default {
         this.g_y.transition().duration(1000)
             .call(d3.axisLeft(y));
 
+        this.svg.append("text")
+                .attr("class", "label")
+                .attr("text-anchor", "end")
+                .attr("x", this.width)
+                .attr("y", this.height - 6)
+                .text('Date');
+
+        this.svg.append("text")
+                .attr("class", "label")
+                //.attr("transform", "rotate(90)")
+                .attr("x", 10)
+                .attr("y", 5)
+                .text(this.x_axis);
+
         var focus = this.svg.append("g")
                     .attr("class", "focus")
                     .style("display", "none");
@@ -138,7 +154,7 @@ export default {
                 function mousemove() {
                     var x0 = x.invert(d3.pointer(event)[0]);
                     var i = bisectDate(json_data, x0, 1);
-					
+
 					if (i<json_data.length){
 						var d0 = json_data[i - 1],
 							d1 = json_data[i],
@@ -154,7 +170,7 @@ export default {
 						}
 						focus.attr("transform", "translate(" + x_trans + "," + y_trans + ")");
 						focus.select(".tooltip-date").text(dateFormatter(d.date));
-						focus.select(".tooltip-value").text(d.value);					
+						focus.select(".tooltip-value").text(d.value);
 					}
                 }
 
@@ -197,4 +213,10 @@ export default {
     .tooltip-date, .tooltip-likes {
         font-weight: bold;
     }
+
+.label{
+  fill:white;
+  font-size: 10px;
+}
+
 </style>
