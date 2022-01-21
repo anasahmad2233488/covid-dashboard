@@ -130,4 +130,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'var/static_root/'
 STATICFILES_DIRS = ['static']
 
-CORS_ORIGIN_ALLOW_ALL = True   
+CORS_ORIGIN_ALLOW_ALL = True
+
+# location to store the MODEL files (if there is more than 1)
+MODELS = os.path.join(BASE_DIR,'models')
