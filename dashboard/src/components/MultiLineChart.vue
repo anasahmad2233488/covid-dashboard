@@ -10,6 +10,7 @@ export default {
   name: "MultiLineChart",
   props: {
     chart_data: Array,
+    var_name: String,
   },
   data() {
     return {
@@ -22,6 +23,8 @@ export default {
       primary_chart: null,
       secondary_chart: null,
       nest_data: null,
+      x_axis: null,
+      y_axis: null,
     };
   },
   mounted() {
@@ -48,6 +51,17 @@ export default {
     this.g_x = this.svg.append("g")
         .attr("transform", "translate(0," + this.height + ")");
     this.g_y = this.svg.append("g");
+    this.x_axis = this.svg.append("text");
+    this.x_axis.attr("class", "label")
+            .attr("text-anchor", "end")
+            .attr("x", this.width)
+            .attr("y", this.height - 6)
+
+    this.y_axis = this.svg.append("text");
+    this.y_axis.attr("class", "label")
+                    //.attr("transform", "rotate(90)")
+                    .attr("x", 10)
+                    .attr("y", 5);
 
     this.generateArc(this.chart_data);
   },
@@ -91,10 +105,6 @@ export default {
         x.domain(d3.extent(json_data, function(d) { return d.date; }));
         y.domain([0, d3.max(json_data, function(d) { return parseFloat(d.value); })]);
 
-
-
-
-
         this.primary_chart
                 .data([nest_data['actual'].values])
                 .attr("class", "primary-line")
@@ -118,6 +128,9 @@ export default {
         // Add the y Axis
         this.g_y.transition().duration(1000)
             .call(d3.axisLeft(y));
+
+          this.x_axis.text('Date');
+          this.y_axis.text(this.var_name);
 
         var focus = this.svg.append("g")
                     .attr("class", "focus")
@@ -194,10 +207,10 @@ export default {
 
                       focus.attr("transform", "translate(" + x_trans + "," + y_trans + ")");
                       focus.select(".tooltip-date").text(dateFormatter(d_actual.date));
-                      focus.select(".tooltip-value-1").text(d_actual.value);
+                      focus.select(".tooltip-value-1").text(d_actual.value.toLocaleString());
 
                       if ((d_actual.date-d_predict.date)==0){
-                        focus.select(".tooltip-value-2").text(d_predict.value);
+                        focus.select(".tooltip-value-2").text(d_predict.value.toLocaleString());
                       }else{
                           focus.select(".tooltip-value-2").text("None");
                       }
@@ -220,7 +233,7 @@ export default {
                         focus.attr("transform", "translate(" + x_trans + "," + y_trans + ")");
                         focus.select(".tooltip-date").text(dateFormatter(d_predict.date));
                         focus.select(".tooltip-value-1").text("None");
-                        focus.select(".tooltip-value-2").text(d_predict.value);
+                        focus.select(".tooltip-value-2").text(d_predict.value.toLocaleString());
 
                     }
                   }

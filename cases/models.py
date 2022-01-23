@@ -46,15 +46,12 @@ class Tests(models.Model):
     pcr = models.IntegerField()
 
     def get_rtk_ag_per_population(self):
-        print(self.rtk_ag, self.state.populations)
         return self.rtk_ag/(self.state.populations)
 
     def get_pcr_per_population(self):
-        print(self.pcr, self.state.populations)
         return self.pcr/(self.state.populations)
 
     def get_total_tests_per_population(self):
-        print(self.rtk_ag+self.pcr, self.state.populations)
         return (self.rtk_ag+self.pcr)/(self.state.populations)
 
     def get_total_tests(self):

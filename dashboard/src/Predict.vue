@@ -20,6 +20,27 @@
         <v-row>
           <v-divider></v-divider>
         </v-row>
+        <v-row>
+          <v-col cols="3">
+          </v-col>
+          <v-col cols="4">
+            <v-select
+              v-model="data_select"
+              :items="data_items"
+              item-text="name"
+              item-value="name"
+              label="Predict"
+              persistent-hint
+              return-object
+            ></v-select>
+          </v-col>
+          <v-col cols=2>
+            <v-btn
+              color='mediumturquoise'
+              @click='update()'
+            >PREDICT</v-btn>
+         </v-col>
+        </v-row>
 		<v-row class="text-center">
      <v-col cols="3">
      </v-col>
@@ -75,12 +96,7 @@
                return-object
              ></v-select>
            </v-col>
-           <v-col cols=2>
-             <v-btn
-               color='mediumturquoise'
-               @click='update()'
-             >PREDICT</v-btn>
-          </v-col>
+
          </v-row>
           <v-row>
            <v-col cols="3">
@@ -122,7 +138,11 @@ export default {
   },
   data: () => ({
           chart_data:[{"date":"2013-04-28","value":0},{"date":"2013-04-29","value":0}],
-          api_url: null,
+          api_base_url: null,
+          api_url: {
+            'cases_new': 'predict/cases/',
+            'cases_death': 'predict/death/'
+          },
           state_select: {state:'Johor', abbr: 'JHR', val: 2},
           state_items: [
             //{state:'Malaysia', abbr: 'MYS', val: 1},
@@ -143,6 +163,11 @@ export default {
             {state:'W.P. Labuan', abbr: 'WLB', val: 16},
             {state:'W.P. Putrajaya', abbr: 'WPJ', val: 17},
           ],
+          data_select: { name: 'New Cases', value: 'cases_new'},
+          data_items: [
+            { name: 'New Cases', value: 'cases_new'},
+            { name: 'Death', value: 'cases_death'},
+          ],
           date: (new Date('2021-01-01')).toISOString().substr(0, 10),
           date_menu: false,
           date_modal: false,
@@ -152,7 +177,7 @@ export default {
           checkins: 60,
 		}),
   mounted() {
-		this.api_url = process.env.VUE_APP_ROOT_API;
+		this.api_base_url = process.env.VUE_APP_ROOT_API;
 		this.update();
   },
   methods: {
@@ -163,14 +188,16 @@ export default {
           var temp = this.temp;
           var percent_vax = this.percent_vax;
 
-          console.log('predict/cases/'+'?state='+state+'&date='+date+'&checkins='+checkins+'&percent_vax='+percent_vax+'&temp='+temp);
-          axios.get(this.api_url+'predict/cases/'+'?state='+state+'&date='+date+'&checkins='+checkins+'&percent_vax='+percent_vax+'&temp='+temp)
+          var target = this.data_select.value;
+          var api_url = this.api_url[target];
+
+          axios.get(this.api_base_url+api_url+'?state='+state+'&date='+date+'&checkins='+checkins+'&percent_vax='+percent_vax+'&temp='+temp)
                 .then( response => {
-                  var var_name = 'cases_new';
                   var chart_data = []
                   response.data.forEach(function(d) {
-                    chart_data.push({"date": d.date, "name": d.name, "value": d[var_name]})
+                    chart_data.push({"date": d.date, "name": d.name, "value": d[target]})
                   });
+                  this.$refs.line_chart.var_name= this.data_select.name;
                   this.$refs.line_chart.updateChart(chart_data);
                 });
           }

@@ -3,12 +3,12 @@
     <v-row>
       <v-col></v-col>
       <v-col cols="8">
-        <div style="" class="text-center mt-10 mb-10 ml-3 mr-3">Explore Malaysia COVID-19 data. Select the period between which you wish the statistics to be presented to you.</div>
+        <div style="" class="text-center mt-10 mb-10 ml-3 mr-3">Explore Malaysia COVID-19 data. Select the period between which you wish the chart and statistics to be presented to you.</div>
       </v-col>
       <v-col></v-col>
     </v-row>
-    <v-row class="text-center">
-      <v-col cols="2">
+    <v-row class="text-center" >
+      <v-col cols="6" md="2">
         <v-select
           v-model="data_select"
           :items="data_items"
@@ -19,7 +19,7 @@
           return-object
         ></v-select>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="6" md="2">
         <v-select
           v-model="state_select"
           :hint="`${state_select.abbr}`"
@@ -31,7 +31,7 @@
           return-object
         ></v-select>
       </v-col>
-      <v-col>
+      <v-col  cols="6" md="2">
         <v-dialog
           ref="start_date_dialog"
           v-model="start_date_modal"
@@ -71,7 +71,7 @@
           </v-date-picker>
         </v-dialog>
       </v-col>
-      <v-col>
+      <v-col  cols="6" md="2">
          <v-dialog
            ref="end_date_dialog"
            v-model="end_date_modal"
@@ -111,7 +111,7 @@
            </v-date-picker>
          </v-dialog>
       </v-col>
-      <v-col cols=2>
+      <v-col cols="6" md="2">
         <v-btn
           color='mediumturquoise'
           @click='update()'
@@ -123,7 +123,7 @@
         <LineChart
           ref="line_chart"
           v-bind:chart_data="chart_data"
-          v-bind:x_axis="data_select.name"
+          v-bind:y_axis_label="data_select.name"
         />
       </v-col>
     </v-row>
@@ -133,18 +133,18 @@
     <v-row class="text-center">
       <v-col cols=12>
         <center class="pt-6 pb-6">
-          Statistics for the day <b>{{updated_end_date}}</b>.
+          Statistics for the date <b>{{updated_end_date}}</b>.
         </center>
       </v-col>
     </v-row>
     <v-row class="text-center">
       <v-col style="font-size:14px">
-        <u>Cases</u>
+        <u>COVID-19 Cases</u>
       </v-col>
     </v-row>
     <v-row class="text-center">
       <v-col
-       cols="3"
+        cols="6" md="3"
        class="d-flex flex-column"
        v-for="item in items.daily_cases"
        :key="item.id"
@@ -167,12 +167,13 @@
     </v-row>
     <v-row class="text-center">
       <v-col style="font-size:14px">
-        <u>Testing</u>
+        <u>COVID-19 Tests</u>
       </v-col>
     </v-row>
     <v-row class="text-center">
       <v-col
-       cols="3"
+       cols="6"
+       md="3"
        class="d-flex flex-column"
        v-for="item in items.daily_testing"
        :key="item.id"
@@ -200,7 +201,8 @@
     </v-row>
     <v-row class="text-center">
       <v-col
-       cols="3"
+       cols="6"
+       md="3"
        class="d-flex flex-column"
        v-for="item in items.daily_mysj"
        :key="item.id"
@@ -233,7 +235,8 @@
     </v-row>
     <v-row class="text-center">
       <v-col
-       cols="3"
+       cols="6"
+       md="3"
        class="d-flex flex-column"
        v-for="item in items.aggregated"
        :key="item.id"
@@ -377,7 +380,6 @@ export default {
     },
     mounted() {
 		this.api_url = process.env.VUE_APP_ROOT_API;
-    this.$refs.line_chart.x_axis = "asdsads";
 		this.update();
     },
     methods: {
@@ -406,14 +408,14 @@ export default {
         .then( response => {
           // update data cards cases
           if(response.data.length>0){
-            this.setDailyCount(0, response.data[0]['cases_new']);
-            this.setDailyCount(1, response.data[0]['cases_recovered']);
-            this.setDailyCount(2, response.data[0]['cases_death']);
-            this.setDailyCount(3, response.data[0]['cases_active']);
-            this.setDailyCount(4, response.data[0]['cases_new_per_population']*1000000);
-            this.setDailyCount(5, response.data[0]['cases_recovered_per_population']*1000000);
-            this.setDailyCount(6, response.data[0]['cases_death_per_population']*1000000);
-            this.setDailyCount(7, response.data[0]['cases_active_per_population']*1000000);
+            this.setDailyCasesCount(0, response.data[0]['cases_new']);
+            this.setDailyCasesCount(1, response.data[0]['cases_recovered']);
+            this.setDailyCasesCount(2, response.data[0]['cases_death']);
+            this.setDailyCasesCount(3, response.data[0]['cases_active']);
+            this.setDailyCasesCount(4, response.data[0]['cases_new_per_population']*1000000);
+            this.setDailyCasesCount(5, response.data[0]['cases_recovered_per_population']*1000000);
+            this.setDailyCasesCount(6, response.data[0]['cases_death_per_population']*1000000);
+            this.setDailyCasesCount(7, response.data[0]['cases_active_per_population']*1000000);
           }
         });
 
@@ -421,12 +423,12 @@ export default {
         .then( response => {
           // update data cards tests
           if(response.data.length>0){
-            this.setDailyCount(8, response.data[0]['rtk_ag']);
-            this.setDailyCount(9, response.data[0]['pcr']);
-            this.setDailyCount(10, response.data[0]['total_tests']);
-            this.setDailyCount(11, response.data[0]['rtk_ag_per_population']*1000000);
-            this.setDailyCount(12, response.data[0]['pcr_per_population']*1000000);
-            this.setDailyCount(13, response.data[0]['total_tests_per_population']*1000000);
+            this.setDailyTestsCount(0, response.data[0]['rtk_ag']);
+            this.setDailyTestsCount(1, response.data[0]['pcr']);
+            this.setDailyTestsCount(2, response.data[0]['total_tests']);
+            this.setDailyTestsCount(3, response.data[0]['rtk_ag_per_population']*1000000);
+            this.setDailyTestsCount(4, response.data[0]['pcr_per_population']*1000000);
+            this.setDailyTestsCount(5, response.data[0]['total_tests_per_population']*1000000);
           }
         });
 
@@ -434,11 +436,11 @@ export default {
         .then( response => {
           // update data cards tests
           if(response.data.length>0){
-            this.setDailyCount(14, response.data[0]['checkins']);
-            this.setDailyCount(15, response.data[0]['unique_ind']);
-            this.setDailyCount(16, response.data[0]['unique_loc']);
-            this.setDailyCount(17, response.data[0]['checkins_to_ind_ratio']);
-            this.setDailyCount(18, (response.data[0]['unique_ind_per_population']*100)+"%");
+            this.setDailyMySJCount(0, response.data[0]['checkins']);
+            this.setDailyMySJCount(1, response.data[0]['unique_ind']);
+            this.setDailyMySJCount(2, response.data[0]['unique_loc']);
+            this.setDailyMySJCount(3, response.data[0]['checkins_to_ind_ratio']);
+            this.setDailyMySJCount(4, (response.data[0]['unique_ind_per_population']*100)+"%");
           }
         });
 
@@ -479,8 +481,8 @@ export default {
         });
 
       },
-      setDailyCount (index, val) {
-        const obj = { n: this.items.daily[index].value }
+      setDailyCasesCount (index, val) {
+        const obj = { n: this.items.daily_cases[index].value }
         anime({
           targets: obj,
           n: val,
@@ -488,7 +490,33 @@ export default {
           duration: 500,
           easing: 'linear',
           update: () => {
-            this.items.daily[index].value = obj.n.toLocaleString()
+            this.items.daily_cases[index].value = obj.n.toLocaleString()
+          }
+        })
+      },
+      setDailyTestsCount (index, val) {
+        const obj = { n: this.items.daily_testing[index].value }
+        anime({
+          targets: obj,
+          n: val,
+          round: 1,
+          duration: 500,
+          easing: 'linear',
+          update: () => {
+            this.items.daily_testing[index].value = obj.n.toLocaleString()
+          }
+        })
+      },
+      setDailyMySJCount (index, val) {
+        const obj = { n: this.items.daily_mysj[index].value }
+        anime({
+          targets: obj,
+          n: val,
+          round: 1,
+          duration: 500,
+          easing: 'linear',
+          update: () => {
+            this.items.daily_mysj[index].value = obj.n.toLocaleString()
           }
         })
       },
@@ -514,10 +542,6 @@ export default {
   .container{
     max-width:830px;
     min-width:630px;
-  }
-  .card{
-    min-width:150px;
-    max-width:200px;
   }
 
   .v-card__title{

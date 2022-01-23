@@ -7,5 +7,6 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path(r'cases/', views.predictCasesView.as_view(), name='predict-cases'),
+    path(r'death/', views.predictDeathView.as_view(), name='predict-death'),
     path('', include(router.urls)),
 ]

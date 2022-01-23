@@ -9,8 +9,8 @@ export default {
   name: "Chart",
   props: {
     chart_data: Array,
-    x_axis: String,
-    y_axis: String,
+    x_axis_label: String,
+    y_axis_label: String,
   },
   data() {
     return {
@@ -19,7 +19,9 @@ export default {
       height: null,
       width: null,
       g_x: null,
-      g_y: null
+      g_y: null,
+      x_axis: null,
+      y_axis: null,
     };
   },
   mounted() {
@@ -45,6 +47,17 @@ export default {
     this.g_x = this.svg.append("g")
         .attr("transform", "translate(0," + this.height + ")");
     this.g_y = this.svg.append("g");
+    this.x_axis = this.svg.append("text");
+    this.x_axis.attr("class", "label")
+            .attr("text-anchor", "end")
+            .attr("x", this.width)
+            .attr("y", this.height - 6)
+
+    this.y_axis = this.svg.append("text");
+    this.y_axis.attr("class", "label")
+                    //.attr("transform", "rotate(90)")
+                    .attr("x", 10)
+                    .attr("y", 5);
 
     this.generateArc(this.chart_data);
   },
@@ -98,19 +111,8 @@ export default {
         this.g_y.transition().duration(1000)
             .call(d3.axisLeft(y));
 
-        this.svg.append("text")
-                .attr("class", "label")
-                .attr("text-anchor", "end")
-                .attr("x", this.width)
-                .attr("y", this.height - 6)
-                .text('Date');
-
-        this.svg.append("text")
-                .attr("class", "label")
-                //.attr("transform", "rotate(90)")
-                .attr("x", 10)
-                .attr("y", 5)
-                .text(this.x_axis);
+        this.x_axis.text('Date');
+        this.y_axis.text(this.y_axis_label);
 
         var focus = this.svg.append("g")
                     .attr("class", "focus")
@@ -121,7 +123,7 @@ export default {
 
                 focus.append("rect")
                     .attr("class", "tooltip")
-                    .attr("width", 100)
+                    .attr("width", 150)
                     .attr("height", 50)
                     .attr("x", 10)
                     .attr("y", -22)
@@ -162,15 +164,15 @@ export default {
 
 						var x_trans = x(d.date);
 						var y_trans = y(d.value)
-						if (x_trans > 550){
-							x_trans -= 120;
-							focus_circle.attr("transform", "translate(120,0)");
+						if (x_trans > 500){
+							x_trans -= 170;
+							focus_circle.attr("transform", "translate(170,0)");
 						} else {
 						focus_circle.attr("transform", "translate(0,0)");
 						}
 						focus.attr("transform", "translate(" + x_trans + "," + y_trans + ")");
 						focus.select(".tooltip-date").text(dateFormatter(d.date));
-						focus.select(".tooltip-value").text(d.value);
+						focus.select(".tooltip-value").text(d.value.toLocaleString());
 					}
                 }
 
@@ -216,7 +218,7 @@ export default {
 
 .label{
   fill:white;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 </style>
