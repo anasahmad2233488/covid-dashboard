@@ -26,7 +26,7 @@ SECRET_KEY = 'r8xpg@*41+n@0s&7%%)fxo$^&qzif$wve^9%@gtwom$l69mbr9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['134.122.20.30', 'localhost', '0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1']
 
 
 # Application definition
@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-from .db_settings import *
+
 
 
 # Password validation
@@ -134,3 +134,5 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # location to store the MODEL files (if there is more than 1)
 MODELS = os.path.join(BASE_DIR,'models')
+
+from .local_settings import *
